@@ -1,0 +1,17 @@
+version: "3.8"
+services:
+  api:
+    build: ./sf_status_uploader_api
+    container_name: sf_status_api
+    ports:
+      - "3000:3000"
+    restart: always
+
+  app:
+    build: ./sf_status_uploader_app
+    container_name: sf_status_app
+    ports:
+      - "8080:80"
+    restart: always
+    depends_on:
+      - api
