@@ -1,0 +1,70 @@
+Requesting for the development of a web app using the NodeJS technology to connect to E2M Database. I will email the credentials you can use for development.
+
+Done 1. App should have a upload XLS (a) and Save (b) functions
+2. The xls/xlsx should have headers and 2 columns only: HAWB, STATUS
+3. After upload, the details will be displayed in a datatable in the upload page.
+4. Once the user is satisfied with the details, user will click the Save button. Details will be provided below.
+5. After saving, the datatable will be cleared and be ready again for another upload and will show a success message.
+6. Every upload of a file, the datatable will be cleared and then show the new batch ready for saving.
+7. Data format of the xls uploaded other than specified in # 2 will show an error message: Invalid format
+
+Acceptable values to be inserted in the STATUS column:
+a. Vehicle Unload
+b. Customs Release
+c. Short Landed
+d. Formal Clearance
+
+Upon click of save button. Execute below script depending on the status indicated in the xls row:
+a. Vehicle Unload:
+    INSERT INTO SF_STATUS_TABLE VALUES (WAYBILL, 'UPLOAD', 'Vehicle Unload', sysdate, null, SEQ_SF_STATUS.nextval, 'N', '31', NULL, 'Vehicle Unload', null, null);
+
+b. Customs Release:
+    INSERT INTO SF_STATUS_TABLE VALUES (WAYBILL, 'UPLOAD', 'Customs Release', sysdate, null, SEQ_SF_STATUS.nextval, 'N', '14', NULL, 'Customs Release', null, null);
+
+c. Short Landed:
+    INSERT INTO SF_STATUS_TABLE VALUES (WAYBILL, 'UPLOAD', 'Short Landed', sysdate, null, SEQ_SF_STATUS.nextval, 'N', '612', NULL, 'Short Landed', '325', '325.Overland shipment, shipment is not in the pre-alert, un-declared to customs;');
+
+d. Formal Clearance:
+    INSERT INTO SF_STATUS_TABLE VALUES (WAYBILL, 'UPLOAD', 'Formal Clearance', sysdate, null, SEQ_SF_STATUS.nextval, 'N', '16', NULL, 'Formal Clearance', '307', '307.Shipment assigned to non-SF designated broker for clearance according to consignee's request;');
+
+WAYBILL = value in the 1st column per row of the xls file uploaded.
+Any status not in the list should not be processed.
+--------------------------------------------------------------------------------
+24-01-04
+- Added CREATED_DATE column on E2MVASP.SF_STATUS_TABLE
+--------------------------------------------------------------------------------
+24-01-10
+1. Create reference table for EVENT_CODE and REASON_CODE
+2. Modify excel file format (HAWB, EVENT_CODE, REASON_CODE, DATE)
+3. Add validation for EVENT_CODE and REASON_CODE
+    - if reason code exists under event code
+--------------------------------------------------------------------------------
+CREATE TABLE E2MVASP.SF_REF_EVENT (
+	EVENT_CODE VARCHAR2(5) NULL,
+	EVENT_STATUS VARCHAR2(50) NULL,
+	REASON_CODE VARCHAR2(5) NULL,
+	REASON_NAME VARCHAR2(250) NULL,
+	CREATED_DATE DATE NULL
+);
+--------------------------------------------------------------------------------
+"react-data-table-component": "^7.5.4"
+"sweetalert2": "^11.4.29"
+"xlsx": "^0.18.5"
+--------------------------------------------------------------------------------
+24-01-15
+1. Add query module
+--------------------------------------------------------------------------------
+24-01-16
+1. Adjust column width
+2. Create API for saving SF status from somewhere
+--------------------------------------------------------------------------------
+1. CHI user
+Username: CHI_User
+password: SFCHIUser
+bcrypt(10): $2b$10$EeWjyl/9VN99ByGNjsh2weF1br7sjhpG7YFMd3q8gHEOgW3usd8Ci
+
+2. NMM user
+Username: NMM_User
+password: SFNMMUser
+bcrypt(10): $2b$10$GmkUfT890Rpi/fVTKTGU8.MTgildkRPof037MkaksJOk3ySzgyqGm
+--------------------------------------------------------------------------------
