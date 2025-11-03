@@ -1,0 +1,16 @@
+﻿# Others
+*.orig
+
+# Library
+node_modules/
+/node_modules
+
+# Certificates
+cert.pem
+csr.pem
+key.pem
+
+# Environment
+.env*.local
+.env
+/configs
